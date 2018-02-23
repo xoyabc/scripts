@@ -3,9 +3,9 @@
 import hashlib
 import base64
 
-```
+'''
 sha1 file with filename (SHA1)
-```
+'''
 def SHA1FileWithName(fineName, block_size=64 * 1024):
   with open(fineName, 'rb') as f:
     sha1 = hashlib.sha1()
@@ -17,9 +17,9 @@ def SHA1FileWithName(fineName, block_size=64 * 1024):
     retsha1 = base64.b64encode(sha1.digest())
     return retsha1
 
-```
+'''
 md5 file with filename (MD5)
-```
+'''
 def MD5FileWithName(fineName, block_size=64 * 1024):
   with open(fineName, 'rb') as f:
     md5 = hashlib.md5()
