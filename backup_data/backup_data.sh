@@ -64,7 +64,7 @@ function BAK_APP_DATA ()
 {
         #process_name="apache"
         #app_dir="/usr/local/apache"
-        #bak_tar_prefix="apache2_default_bak"
+        #bak_tar_prefix="apache_default_bak"
         process_name="$1"
         app_dir="$2"
         bak_tar_prefix="$3"
