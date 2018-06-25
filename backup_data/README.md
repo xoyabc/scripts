@@ -6,10 +6,9 @@
 
 可支持单个文件，多个文件，单个目录，多个目录备份。
 
-默认会检查是否有nginx,openresty,apache等web进程，若有会默认进行备份，第二次执行时会检查是否生成对应的默认备份文件，若有则不备份，交由`BAK_APP_DATA`
-函数处理。
+默认会检查是否有nginx,openresty,apache等web进程，若有会进行备份，并在`/data/backup/当天日期`目录下生成默认备份文件名开头的tar包，第二次执行时会检查是否有对应的默认备份文件名，若有则不备份。
 
-`BAK_APP_DATA`使用样例如下：
+web数据备份由`BAK_APP_DATA`函数处理,其使用样例如下：
 
 ``` bash
 BAK_APP_DATA apache /usr/local/apache apache_default_bak
@@ -17,6 +16,15 @@ BAK_APP_DATA openresty /usr/local/openresty/nginx openresty_nginx_default_bak
 BAK_APP_DATA nginx /etc/nginx nginx_default_bak
 ```
 其中第一个参数为`进程名`，第二个参数为`程序对应目录`，第三个参数为`默认备份文件名前缀`(注意要保证唯一)，备份位置在目录`/data/backup/当天日期/进程名`中。
+
+# 备份位置及备份文件名
+
+这里的当天日期格式为`20180626`的年月日形式。
+
+| 备份对象 | 备份位置 | 备份文件名 | 备注|
+| :-----: | :-----: | :-----: | :-----: |
+| 文件 | /data/backup/当天日期| 原文件名_年月日_时分秒.tar.gz | hosts_20180626_015104.tar.gz 这里的tar包不带/ |
+| 目录 | /data/backup/当天日期/程序名 | 程序名_20180626_020145.tar.gz | nginx_20180626_020145.tar.gz 这里的tar包不带/ |
 
 ## 使用示例
 
