@@ -38,6 +38,7 @@ function BAK_DATA ()
                 else
                         warn_echo "Backup directory ${base_dir} failed"
                 fi
+        # deal with file
         elif [ -f ${DIR_OR_FILE} ]
         then
                 parent_dir=$(dirname ${DIR_OR_FILE})
@@ -58,10 +59,11 @@ function BAK_DATA ()
         fi
 }
 
+# backup import web data
 function BAK_APP_DATA ()
 {
         #process_name="apache"
-        #app_dir="/etc/apache2"
+        #app_dir="/usr/local/apache"
         #bak_tar_prefix="apache2_default_bak"
         process_name="$1"
         app_dir="$2"
@@ -110,7 +112,6 @@ if [ $# -lt 1 ];then
 fi
 for BAK_DIR_OR_FILENAME in $*
 do
-        #echo ${BAK_DIR_OR_FILENAME}
         [ ! -z ${BAK_DIR_OR_FILENAME} ] && BAK_DATA ${BAK_DIR_OR_FILENAME}
 done
 }
