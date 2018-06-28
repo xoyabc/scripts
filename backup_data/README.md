@@ -133,15 +133,3 @@ nginx/fastcgi_temp/
 nginx/client_body_temp/
 ```
 
-
-
-
-
-
-
-
-
-
-
-
-
