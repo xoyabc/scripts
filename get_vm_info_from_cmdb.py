@@ -36,7 +36,7 @@ def get_element_of_td(text):
     except AttributeError:
         #print "{0} AttributeError" .format(text)
         result = text
-    return result    
+    return result
 
 def line_prepender(filename, line):
     with open(filename, 'r+') as f:
