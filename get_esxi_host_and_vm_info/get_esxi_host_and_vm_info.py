@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import paramiko, re, os
 from openpyxl import Workbook
@@ -38,6 +37,7 @@ class ssh_connect():
         result_cmd_dict = {}
         for k, v in cmd_dict.iteritems():
             output = self.ssh_command(v)
+            # print output
             if len(output) < 2:
                 result_cmd_dict[k] = output[0].replace('\n', '')
             else:
@@ -82,19 +82,22 @@ class ssh_connect():
             cmd_get_vm_info = "vim-cmd vmsvc/get.guest {0}" .format(vm_vmid)
             cmd_power_status = "vim-cmd vmsvc/get.summary {0} |grep powerState |awk -F '\"' '{{print $(NF-1)}}'" .format(vm_vmid)
             cmd_tool_status = "vim-cmd vmsvc/get.guest {0} |grep toolsStatus |awk -F '\"' '{{print $(NF-1)}}'" .format(vm_vmid)
+            cmd_guest_status = "vim-cmd vmsvc/get.guest {0} |grep guestState |awk -F '\"' '{{print $(NF-1)}}'" .format(vm_vmid)
             # cmd of cpu_count,mem,disk size
             result_dict_vm = {}
             cmds_vm = {
                 "cpu" : "vim-cmd vmsvc/get.summary {0} |grep numCpu |awk '{{split($NF,a,\",\");print a[1]}}'" .format(vm_vmid),
-                "mem" : "vim-cmd vmsvc/get.summary {0} |grep memorySizeMB |awk '{{split($NF,a,\",\");print a[1]/1024}}'" .format(vm_vmid),
+                "mem" : "vim-cmd vmsvc/get.summary {0} |grep memorySizeMB |awk '{{split($NF,a,\",\");printf\"%d\",a[1]/1024}}'" .format(vm_vmid),
                 "disk" : "vim-cmd vmsvc/device.getdevices {0} |grep capacityInKB |awk -F '[, ]' '{{sum+=$(NF-2)}}END{{printf\"%d\",sum/1024/1024}}'" .format(vm_vmid)
             }
             vm_detailed_info = self.ssh_command(cmd_get_vm_info)
             vm_power_status = self.ssh_command(cmd_power_status)[0].replace('\n', '')
             vm_tool_status = self.ssh_command(cmd_tool_status)[0].replace('\n', '')
+            vm_guest_status = self.ssh_command(cmd_guest_status)[0].replace('\n', '')
             result_dict_vm = self.get_cmd_result(cmds_vm)
+            #print vm_detailed_info
             ip_list = []
-            if vm_power_status == 'poweredOn' and vm_tool_status == 'toolsOk':
+            if vm_power_status == 'poweredOn' and vm_guest_status == 'running':
                 for i, line in enumerate(vm_detailed_info):
                     if 'hostName' in line and 'ipAddress' in vm_detailed_info[i+1]:
                         lan_ip = vm_detailed_info[i+1].split('"')[-2]
@@ -119,6 +122,7 @@ class ssh_connect():
         first_line = '宿主机名称 宿主机IP 虚拟机vmid 主机名 电源状态 内网IP CPU核数 内存(G)  硬盘(G) 其他IP'
         self.write_to_file('vm_info.txt', *host_info_list)
         self.line_prepender('vm_info.txt', first_line)
+        #print host_info_list
         return host_info_list
 
 class Main(object):
@@ -130,9 +134,9 @@ class Main(object):
     def convert_list_format(self, info_list):
         info_new = []
         for x in info_list:
-            if re.search(r'(^[0-9]{1,4}$)', x):
+            if re.search(r'(^[0-9]{1,5}$)', x):
                 x = int(x)
-            elif re.search(r'(^[0-9]\.[0-9]{2}$)', x):
+            elif re.search(r'(^[0-9]{1,2}\.[0-9]{2}$)', x):
                 x = float(x)
             else:
                 x = x
@@ -141,7 +145,7 @@ class Main(object):
     # put all host and vm info to list named all_info_list
     def all_host_and_vm_info(self):
         # username = 'root'
-        # password = 'xxxxxxxxx'
+        # password = 'xxxxxxx'
         # ip_list_file = 'ip.txt'
         with open(ip_list_file) as f:
             hosts_info_list = []
@@ -193,10 +197,11 @@ class Main(object):
             save_path += ('-' + host_tag_lists[i].decode())
         save_path += '.xlsx'
         wb.save(save_path)
-        
+
 if __name__ == '__main__':
-    ip_list_file = 'ip.txt'
     username = 'root'
-    password = 'xxxxxxxxx'
+    password = 'xxxxxxx'
+    ip_list_file = 'ip.txt'
     main = Main(ip_list_file, username, password)
+    #main.all_host_and_vm_info()
     main.print_host_lists_excel()
