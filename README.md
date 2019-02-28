@@ -1,6 +1,15 @@
 # scripts
 some daily scripts(e.g.,shell,python)
 
+
+## backup_data
+
+备份脚本（支持单个文件&多个文件&单个目录&多个目录）
+
+## get_esxi_host_and_vm_info
+
+获取 ESXI 中的宿主机及虚机基本信息
+
 ## calculate_md5_sha1_of_big_file_using_python.py
 
 计算MD5 及SHA1 值
