@@ -67,7 +67,7 @@ status)
 status $prog
 RETVAL=$?
 ;;
-*)
+*) 
 echo $"Usage: $prog {start|stop|restart|reload|status|help}"
 exit 1
 esac
