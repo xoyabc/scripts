@@ -1,7 +1,7 @@
 #!/bin/bash
 # **********************************************************
-# * Author        : louxiaohui
-# * Email         : xiaohui.lou@qq.com
+# * Author        : xoyabc
+# * Email         : xoyabc@qq.com
 # * Last modified : 2018-12-13 15:26
 # * Description   : 
 # * ********************************************************
