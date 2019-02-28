@@ -14,6 +14,7 @@ info_echo(){
     echo -e "\033[40;32m[Info]: $1 \033[0m"
 }
 
+port=22
 
 function check_port()
 {
@@ -47,7 +48,7 @@ function check_ping()
 cat ip.list |while read ip
 do
         ping_result=$(check_ping ${ip})
-        port_result=$(check_port ${ip} 22)
+        port_result=$(check_port ${ip} ${port})
 
         if [[ ${ping_result} == "ok" && ${port_result} == "ok" ]]
         then
