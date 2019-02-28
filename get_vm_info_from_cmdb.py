@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # **********************************************************
-# * Author        : louxiaohui
-# * Email         : xiaohui.lou@quanshi.com
+# * Author        : xoyabc
+# * Email         : xoyabc@qq.com
 # * Last modified : 2018-07-03 23:11
 # * Filename      : host.py
 # * Description   : 
