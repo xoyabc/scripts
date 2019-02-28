@@ -31,5 +31,11 @@ chrome 浏览器打开 CMDB，开发者工具切到network选项卡，复制出j
 
 使用到了 lxml，第一次使用，很好用！
 
+## nginx.sh
 
+nginx启动脚本（centos）
+
+## task_daemon.sh
+
+后台运行命令，适用于运行时间较长的命令或脚本。
 
