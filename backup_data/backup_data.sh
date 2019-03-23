@@ -87,9 +87,9 @@ function BAK_APP_DATA ()
         fi
 }
 
-BAK_APP_DATA apache /usr/local/apache apache_default_bak
-BAK_APP_DATA openresty /usr/local/openresty/nginx openresty_nginx_default_bak
-BAK_APP_DATA nginx /etc/nginx nginx_default_bak
+BAK_APP_DATA apache /usr/local/apache/conf apache_default_bak
+#BAK_APP_DATA openresty /usr/local/openresty/nginx openresty_nginx_default_bak
+#BAK_APP_DATA nginx /etc/nginx nginx_default_bak
 
 Usage(){
    warn_echo "
