@@ -2,6 +2,15 @@
 # **********************************************************
 # * Author        : xoyabc
 # * Email         : 1031138448@qq.com
+# * Last modified : 2019-04-09 22:26
+# * Filename      : check_port.sh
+# * Description   : 
+# * ********************************************************
+
+#!/bin/bash
+# **********************************************************
+# * Author        : louxiaohui
+# * Email         : xiaohui.lou@quanshi.com
 # * Last modified : 2018-07-03 15:26
 # * Filename      : check_port.sh
 # * Description   : 
@@ -14,7 +23,7 @@ info_echo(){
     echo -e "\033[40;32m[Info]: $1 \033[0m"
 }
 
-port=22
+PORT="${1:-22}"
 
 function check_port()
 {
@@ -34,7 +43,7 @@ function check_port()
 function check_ping()
 {
         host="$1"
-        ping -c 2 -i 0.2 ${host} -w 1 &>/dev/null
+        ping -c 2 -i 0.5 ${host} &>/dev/null
         res=$?
         if [ ${res} -eq 0 ]
         then
@@ -48,7 +57,7 @@ function check_ping()
 cat ip.list |while read ip
 do
         ping_result=$(check_ping ${ip})
-        port_result=$(check_port ${ip} ${port})
+        port_result=$(check_port ${ip} ${PORT})
 
         if [[ ${ping_result} == "ok" && ${port_result} == "ok" ]]
         then
