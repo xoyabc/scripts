@@ -2,16 +2,9 @@
 # **********************************************************
 # * Author        : xoyabc
 # * Email         : xoyabc@qq.com
-# * Last modified : 2018-12-13 15:26
+# * Last modified : 2019-05-29 10:02
 # * Description   : 
 # * ********************************************************
-
-warn_echo(){
-    echo -e "\033[40;93m$1 \033[0m"
-}
-info_echo(){
-    echo -e "\033[40;32m$1 \033[0m"
-}
 
 PORT=22
 RESULT_FILE="ip.txt"
@@ -22,6 +15,25 @@ IP=(
 192.168.1.
 192.168.2.
 )
+
+warn_echo(){
+    echo -e "\033[40;93m$1 \033[0m"
+}
+info_echo(){
+    echo -e "\033[40;32m$1 \033[0m"
+}
+
+#允许的进程数
+THREAD_NUM=${1:-2000}
+#定义描述符为9的管道
+mkfifo tmp
+exec 9<>tmp
+#预先写入指定数量的换行符，一个换行符代表一个进程
+for ((i=0;i<$THREAD_NUM;i++))
+do
+    echo -ne "\n" 1>&9
+done
+
 for ip_segment in ${IP[@]}
 do
     for i in $(seq 1 1 253)
@@ -59,16 +71,43 @@ function check_ping()
         fi
 }
 
-
-cat ip.list |while read ip
+echo "开始执行"
+date
+while read ip
 do
-        ping_result=$(check_ping ${ip})
-        port_result=$(check_port ${ip} ${PORT})
-
+{
+    #进程控制
+    read -u 9
+    {
+            ping_result=$(check_ping ${ip})
+            port_result=$(check_port ${ip} ${PORT})
         if [[ ${ping_result} == "up" && ${port_result} == "up" ]]
         then
                 info_echo "${ip} ${ping_result} ${port_result}" >> ${RESULT_FILE}
         else
                 warn_echo "${ip} ${ping_result} ${port_result}" >> ${RESULT_FILE}
         fi
-done
+        sleep 1
+        echo -ne "\n" 1>&9
+    }&
+}
+done < ip.list
+wait
+echo "执行结束"
+date
+rm tmp
+cat ${RESULT_FILE} |sort -k1 -o ${RESULT_FILE}
+
+
+#cat ip.list |while read ip
+#do
+#        ping_result=$(check_ping ${ip})
+#        port_result=$(check_port ${ip} ${PORT})
+#
+#        if [[ ${ping_result} == "up" && ${port_result} == "up" ]]
+#        then
+#                info_echo "${ip} ${ping_result} ${port_result}" >> ${RESULT_FILE}
+#        else
+#                warn_echo "${ip} ${ping_result} ${port_result}" >> ${RESULT_FILE}
+#        fi
+#done
