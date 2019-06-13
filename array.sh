@@ -9,6 +9,11 @@
 # REF:
 # https://www.jianshu.com/p/543fa9df3469
 # https://blog.csdn.net/ee230/article/details/48316317 
+
+# traverse a two-dimensional array
+
+# method 1
+
 ip_array=(
 200 ZR
 201 ZR
@@ -28,7 +33,8 @@ do
         echo "ip is $ip, role is $role"
 done
 
-# two-dimensional array 
+# method 2 (recommended)
+
 declare -a TEST
 TEST=(
 '1 2'
