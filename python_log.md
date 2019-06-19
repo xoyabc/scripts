@@ -37,8 +37,13 @@ log.critical('This will get logged')
 log.warning('This will get logged')
 log.error('This will get logged')
 
-# simple logging
-#logging.basicConfig(level=logging.DEBUG,format='[%(asctime)s] - [%(threadName)5s] - [%(filename)s-line:%(lineno)d] [%(levelname)s] %(message)s',filename='/tmp/agent.log',filemode='a')
-#logging.debug('This will get logged')
-#logging.info('This will get logged')
 ```
+
+## simple logging
+
+```python
+logging.basicConfig(level=logging.DEBUG,format='[%(asctime)s] - [%(threadName)5s] - [%(filename)s-line:%(lineno)d] [%(levelname)s] %(message)s',filename='/tmp/agent.log',filemode='a')
+logging.debug('This will get logged')
+logging.info('This will get logged')
+```
+
