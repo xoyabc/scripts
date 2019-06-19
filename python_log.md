@@ -47,3 +47,10 @@ logging.debug('This will get logged')
 logging.info('This will get logged')
 ```
 
+## 使用配置文件日志
+
+https://python3-cookbook.readthedocs.io/zh_CN/latest/c13/p11_add_logging_to_simple_scripts.html
+
+
+
+
