@@ -51,6 +51,6 @@ logging.info('This will get logged')
 
 https://python3-cookbook.readthedocs.io/zh_CN/latest/c13/p11_add_logging_to_simple_scripts.html
 
-
+https://docs.python.org/zh-cn/3/howto/logging.html
 
 
