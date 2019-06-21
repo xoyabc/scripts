@@ -7,7 +7,9 @@ from logging.handlers import TimedRotatingFileHandler
 BASEPATH = os.path.realpath(os.path.dirname(__file__))
 LOGPATH = BASEPATH + os.sep + 'log'
 LOGFILE = LOGPATH + os.sep + 'app.log'
-os.makedirs(LOGPATH,mode=0o644,exist_ok=False)
+
+# set exist_ok para to True avoid 'FileExistsError: [Errno 17] File exists:' error
+os.makedirs(LOGPATH,mode=0o644,exist_ok=True)  
 
 def Write_to_Log():
     log_fmt = '%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s'
