@@ -44,6 +44,8 @@ class ssh_connect():
                 result_cmd_dict[k] = output
         return result_cmd_dict
 
+    
+    # get host info
     def get_host_info(self):
         host_info_list = []
         # k for every item, v for the relevant command
@@ -65,7 +67,8 @@ class ssh_connect():
         host_info_list.append(host_info)
         return host_info_list
 
-    # get host info
+    
+    # get vm host info
     def get_vm_info(self):
         # k for every item, v for the relevant command
         # cmd3 indicate the vm machine name
