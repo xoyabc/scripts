@@ -1,5 +1,7 @@
 # 获取宿主机及虚拟机信息
 
+运行环境为 Python2.7
+
 ## get_esxi_host_and_vm_info.py
 
  - 1, 在脚本所在路径新建一个`ip.txt`文件，贴入宿主机IP，一行一个IP
