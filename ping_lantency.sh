@@ -4,6 +4,8 @@ DATE=$(date +%Y%m%d%H%M)
 LOG_FILE="ping.log"
 IP="192.168.1.1"
 
+[ ! -f ${LOG_FILE} ] && > ${LOG_FILE}
+
 # date/loss rate/min/avg/max
 if [ $(cat ${LOG_FILE} |grep max |wc -l) -lt 1 ]
 then
