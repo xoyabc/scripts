@@ -1,6 +1,6 @@
 ## 应用场景
 
-针对装有 web 服务(nginx, apache) 的 server,在 web 目录下生成下载链接。
+针对装有 web 服务(nginx, apache) 的 server,对指定根目录下的文件生成下载链接，方便其他机器下载使用。
 
 配合别名使用，效果更佳。
 
