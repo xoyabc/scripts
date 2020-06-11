@@ -65,6 +65,8 @@ alias l='bash /www/generate_url_link.sh'
 
 1，下载脚本到你的 server ，赋予执行权限
 
+> chmod a+x /path/to/the/generate_url_link.sh
+
 2，设置 **WEBROOT** 及 **PORT**
 
 修改脚本中 `WEB_ROOT_DIR` 及 `PORT` 为实际根目录及端口
