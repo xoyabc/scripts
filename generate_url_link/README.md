@@ -6,6 +6,30 @@
 
 此处根目录为 /www，别名为 `l`
 
+### nginx 配置示例
+
+```shell
+server {
+        listen 8080 default_server;
+        server_name  localhost;
+        listen [::]:8080 default_server ipv6only=on;
+        charset utf-8;
+        access_log  /var/log/nginx/8080.access.log;
+        root   /www;
+        index  index.html index.htm index.php;
+
+        location / {
+                try_files $uri $uri/ /index.html; 
+        }
+
+        error_page  404  /404.html;
+
+        # redirect server error pages to the static page /50x.html
+        #
+        error_page   500 502 503 504  /50x.html;
+}
+```
+
 ```shell
 alias l='bash /www/generate_url_link.sh'
 ```
