@@ -165,3 +165,15 @@ http://192.168.1.200:8080/conf/test/20200608/2
 http://192.168.1.200:8080/conf/test/20200608/3
 ```
 
+### 异常情况
+
+主要为文件或目录不存在
+
+
+```shell
+root@ss:/www/conf/test$l /www/2aaaa /www/ssasdfdsfd  /www/2/          
+[Warning]: cannot access /www/2aaaa: No such a file or directory 
+[Warning]: cannot access /www/ssasdfdsfd: No such a file or directory 
+[Warning]: There is no file under /www/2/ directory 
+```
+
