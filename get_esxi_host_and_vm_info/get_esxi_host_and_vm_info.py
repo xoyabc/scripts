@@ -15,7 +15,7 @@ class ssh_connect():
         #  加上这句话不用担心选yes的问题，会自动选上
         # （用ssh连接远程主机时，第一次连接时会提示是否继续进行远程连接，选择yes）
         self.ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        self.ssh.connect(self.host, 22, self.name, self.pwd, timeout=5)  # 连接远程主机，SSH端口号为22
+        self.ssh.connect(self.host, 22, self.name, self.pwd, timeout=10)  # 连接远程主机，SSH端口号为22
     # execute command
     def ssh_command(self, cmd):
         stdin, stdout, stderr = self.ssh.exec_command(cmd)
@@ -33,19 +33,21 @@ class ssh_connect():
             f.write(line.rstrip('\r\n') + '\n' + content)
 
     # get cmd result
+    # k for every item, v for the relevant command
     def get_cmd_result(self, cmd_dict):
         result_cmd_dict = {}
         for k, v in cmd_dict.iteritems():
             output = self.ssh_command(v)
             # print output
             if len(output) < 2:
-                result_cmd_dict[k] = output[0].replace('\n', '')
+                if k == "cmd3":
+                    result_cmd_dict[k] = output
+                else:
+                    result_cmd_dict[k] = output[0].replace('\n', '')
             else:
                 result_cmd_dict[k] = output
         return result_cmd_dict
 
-    
-    # get host info
     def get_host_info(self):
         host_info_list = []
         # k for every item, v for the relevant command
@@ -67,16 +69,16 @@ class ssh_connect():
         host_info_list.append(host_info)
         return host_info_list
 
-    
-    # get vm host info
+    # get host info
     def get_vm_info(self):
         # k for every item, v for the relevant command
         # cmd3 indicate the vm machine name
         cmds = {
             "cmd1" : "hostname |awk -F '[.]' '{print $1}'",
-            "cmd3" : "vim-cmd vmsvc/getallvms |awk 'NR>1{print $1,$2}' |sort -nr",
+            "cmd3" : "vim-cmd vmsvc/getallvms |awk 'NR>1 && NF>1 && $1~/[0-9]{1,3}/{print $1,$2}' |sort -nr",
         }
         result_dict = self.get_cmd_result(cmds)
+        print result_dict
         host_info_list = []
         # get vm info
         for i in result_dict['cmd3']:
@@ -97,13 +99,17 @@ class ssh_connect():
             vm_power_status = self.ssh_command(cmd_power_status)[0].replace('\n', '')
             vm_tool_status = self.ssh_command(cmd_tool_status)[0].replace('\n', '')
             vm_guest_status = self.ssh_command(cmd_guest_status)[0].replace('\n', '')
+            print vm_vmid, vm_guest_status
+            print self.ssh_command(cmd_guest_status)
+
             result_dict_vm = self.get_cmd_result(cmds_vm)
             #print vm_detailed_info
             ip_list = []
             if vm_power_status == 'poweredOn' and vm_guest_status == 'running':
                 for i, line in enumerate(vm_detailed_info):
                     if 'hostName' in line and 'ipAddress' in vm_detailed_info[i+1]:
-                        lan_ip = vm_detailed_info[i+1].split('"')[-2]
+                        # lan_ip = vm_detailed_info[i+1].split('"')[-2]
+                        lan_ip = re.split('["<>]', vm_detailed_info[i+1])[-2]
                     if 'ipAddress' in line and re.search(r'[0-9]{1,3}\.', line) and 'prefixLength' in vm_detailed_info[i+1]:
                         if lan_ip not in line:
                             other_ip = line.split('"')[-2]
@@ -163,7 +169,7 @@ class Main(object):
                     hosts_info_list.append(host_info_list)
                     vms_info_list.append(vm_info_list)
                 except Exception, msg:
-                    print '{0} bad msg' .format(msg)
+                    print '{0} bad msg, cannot connect to {1}' .format(msg, host)
             print hosts_info_list
             print vms_info_list
             all_info_list.append(hosts_info_list)
@@ -186,11 +192,13 @@ class Main(object):
         for i in range(len(host_tag_lists)):
             count = 1
             for info_list in all_info_list[i]:
+                # traverse the hosts_info_list and vms_info_list
                 for info in info_list:
+                    print 'info: {0}' .format(info)
                     info = info.split(' ')
                     info_new = self.convert_list_format(info)
                     info_new.insert(0, count)
-                    print info_new
+                    print 'info_list_with_seq_num: {0}' .format(info_new)
                     ws[i].append(info_new)
                     # ws[0].append([count, info[0], info[1], int(info[2]), int(info[3]), float(info[4]), info[5], info[6], info[7]])
                     count += 1
@@ -200,6 +208,7 @@ class Main(object):
             save_path += ('-' + host_tag_lists[i].decode())
         save_path += '.xlsx'
         wb.save(save_path)
+
 
 if __name__ == '__main__':
     username = 'root'
