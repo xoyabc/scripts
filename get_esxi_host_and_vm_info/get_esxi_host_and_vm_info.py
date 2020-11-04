@@ -40,6 +40,7 @@ class ssh_connect():
             output = self.ssh_command(v)
             # print output
             if len(output) < 2:
+                # remove replace('\n', '') when the number of vm machine is less than 2 to ensure that output is a list
                 if k == "cmd3":
                     result_cmd_dict[k] = output
                 else:
