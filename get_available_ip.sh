@@ -7,8 +7,9 @@
 # * ********************************************************
 
 PORT=22
-RESULT_FILE="ip.txt"
-> ip.list
+RESULT_FILE="/www/scripts/ip.txt"
+IP_LIST="/www/scripts/ip.list"
+> ${IP_LIST}
 > ${RESULT_FILE}
 
 IP=(
@@ -26,8 +27,8 @@ info_echo(){
 #允许的进程数
 THREAD_NUM=${1:-2000}
 #定义描述符为9的管道
-mkfifo tmp
-exec 9<>tmp
+mkfifo tmp_fifo
+exec 9<>tmp_fifo
 #预先写入指定数量的换行符，一个换行符代表一个进程
 for ((i=0;i<$THREAD_NUM;i++))
 do
@@ -39,7 +40,7 @@ do
     for i in $(seq 1 1 253)
     do
         ip="${ip_segment}${i}"
-        echo ${ip} >> ip.list
+        echo ${ip} >> ${IP_LIST}
     done
 done
 
@@ -61,7 +62,7 @@ function check_port()
 function check_ping()
 {
         host="$1"
-        ping -c 2 -i 0.2 ${host} -w 1 &>/dev/null
+        ping -c 2 -i 0.1 ${host} -w 1 &>/dev/null
         res=$?
         if [ ${res} -eq 0 ]
         then
@@ -71,7 +72,7 @@ function check_ping()
         fi
 }
 
-echo "开始执行"
+
 date
 while read ip
 do
@@ -91,12 +92,12 @@ do
         echo -ne "\n" 1>&9
     }&
 }
-done < ip.list
+done < ${IP_LIST}
 wait
 echo "执行结束"
 date
-rm tmp
-cat ${RESULT_FILE} |sort -k1 -o ${RESULT_FILE}
+rm tmp_fifo
+cat ${RESULT_FILE} |sort -k1 -o ${RESULT_FILE} 
 
 
 #cat ip.list |while read ip
