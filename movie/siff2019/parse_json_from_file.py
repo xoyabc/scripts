@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 import json
 import csv
@@ -14,6 +14,7 @@ with open("json.txt", 'rU') as f:
     movie_info_list = []
     base_info = []
     data = json.load(f)
+    data.sort(key=lambda x: (x.get("group","N/A"),x.get("film1","N/A"),x.get("date","N/A"),x.get("cinema","N/A")), reverse=False) 
     print type(data)
     #for i,v in enumerate(data[0:10]):
     for i,v in enumerate(data):
@@ -65,8 +66,8 @@ with open("json.txt", 'rU') as f:
             memo = 'N/A' if movie_dict['memo'] == '' or movie_dict['memo'] == None else movie_dict.get('memo', 'N/A')
         except Exception as e:
             memo = 'N/A'
-        print group,id,name_cn,name_en,date,weekday,stime,etime,length,cinema,halls_name, \
-              director,country,co_production_country,resolving_power,projection_material,film_medium,show_type,memo
+        #print group,id,name_cn,name_en,date,weekday,stime,etime,length,cinema,halls_name, \
+        #      director,country,co_production_country,resolving_power,projection_material,film_medium,show_type,memo
         base_info = [group,id,name_cn,name_en,date,weekday,stime,etime,length,cinema,halls_name,director,country,co_production_country,resolving_power,projection_material,film_medium,show_type,memo]
         movie_info_list.append(base_info)
 
