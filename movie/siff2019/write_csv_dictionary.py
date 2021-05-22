@@ -17,7 +17,7 @@ with open("json.txt", 'rU') as f:
     print type(data)
 
     with f1:
-        # fieldnames must contains all fields in dict, or it will throw an exception:
+        # fieldnames must contain all fields in dict, or it will throw an exception:
         # " ValueError: dict contains fields not in fieldnames: u'show_time' "
         fnames = ['group', 'id', 'film1', 'film2', 'date', 'weekday', 'stime', 'etime', 'length', 'cinema', 'halls_name', 'director', 'country', 'co_production_country', 'resolving_power', 'projection_material', 'film_medium', 'show_type', 'memo', 'area', 'show_time']
         writer = csv.DictWriter(f1, fieldnames=fnames)
