@@ -25,12 +25,12 @@
 cat eng |awk 'NR>1' |sed '/^\s*$/d' |grep -Ev '^[0-9]{1,}' |while read line
 do 
         echo "hahaha:${line}"
-		# 蓝光版单词个数
+	# 蓝光版单词个数
         total_eng_word_num=$(echo ${line} |awk -F "[ ]+" '{print NF}')
         # 去除中英字幕里的时间轴行及字幕序号，只保留字幕内容
         cat chs_eng |awk 'NR>1' |sed '/^\s*$/d' |grep -Ev '^[0-9]{1,}$|([0-9]{2}:){2}[0-9]{2}' |awk --posix -F "" '{if($1~/^[0-9a-zA-Z]/) print $0}' |while read t_line
         do
-		    # DVD/WEBDL 单词个数
+	    # DVD/WEBDL 单词个数
             total=$(echo ${t_line} |awk -F "[ ]+" '{print NF}')
             cout=0
             for i in $line
@@ -46,8 +46,8 @@ do
             cout_of_word=$(echo "${total_eng_word_num} ${total}" |awk '{d=$1-$2;print (d>0)?d:-d}')
             #echo ${dup_percent}
             #echo "cout/total: ${cout}/${total}=${dup_percent}%"
-			# 1，重复率大于 90%
-			# 2，蓝光版与 DVD/WEBDL 单词数相差不超过3个 
+	    # 1，重复率大于 90%
+	    # 2，蓝光版与 DVD/WEBDL 单词数相差不超过3个 
             if (( ${dup_percent} >= 90 )) && (( ${cout_of_word} <=3 )) 
             then
                     #echo ${line}
