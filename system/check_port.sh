@@ -23,7 +23,12 @@ info_echo(){
     echo -e "\033[40;32m[Info]: $1 \033[0m"
 }
 
-PORT="${1:-22}"
+PORT=${1:-22}
+
+
+which nc &>/dev/null
+[ $? -ne 0 ] && wget -qO /etc/yum.repos.d/JD-Base.repo   http://116.198.48.75/conf/JD-Base.repo && yum makeca
+che && yum -y install nc &>/dev/null
 
 function check_port()
 {
@@ -43,7 +48,7 @@ function check_port()
 function check_ping()
 {
         host="$1"
-        ping -c 2 -i 0.5 ${host} &>/dev/null
+        ping -c 2 -i 0.2 ${host} -w 1 &>/dev/null
         res=$?
         if [ ${res} -eq 0 ]
         then
@@ -53,16 +58,16 @@ function check_ping()
         fi
 }
 
+printf "%15s %11s %5s\n" "IP" "Ping" "Port"   
 
-cat ip.list |while read ip
+cat ip.list |sed '/^\s*$/d' |while read ip
 do
         ping_result=$(check_ping ${ip})
         port_result=$(check_port ${ip} ${PORT})
-
         if [[ ${ping_result} == "ok" && ${port_result} == "ok" ]]
         then
-                info_echo "${ip} ${ping_result} ${port_result}"
+                info_echo "${ip}    ${ping_result}    ${port_result}"
         else
-                warn_echo "${ip} ${ping_result} ${port_result}"
+                warn_echo "${ip}    ${ping_result}    ${port_result}"
         fi
 done
