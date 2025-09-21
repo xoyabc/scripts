@@ -101,7 +101,7 @@ if __name__ == '__main__':
     movie_info_list = []
     url_list = []
     f_csv = 'movie.csv'
-    head_instruction = "id\tactivityFilmCategoryName\tactivityFilmName\tbasicInformation\tdate\tstartTime\tendTime\tprice\tactivityCinemaName\tactivityCinemaHall,hasTickets"
+    head_instruction = "id\tactivityFilmCategoryName\tactivityFilmName\tbasicInformation\tdate\tstartTime\tendTime\tprice\tactivityCinemaName\tactivityCinemaHall\thasTickets"
     movie_info_list = get_schedule_detailed_info()
     #movie_info_list = get_schedule_base_info()
     write_to_csv(f_csv, head_instruction, *movie_info_list)
