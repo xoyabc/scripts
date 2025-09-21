@@ -68,24 +68,25 @@ def get_schedule_base_info(url_link):
     # request douban
     res = requests.get(url_link, headers=douban_headers, verify=False)
     json_data=res.json()
-    id = json_data['id']
     activityFilmCategoryName = json_data['activityFilmCategoryName']
     activityFilmName = json_data['activityFilmName']
     basicInformation = json_data['basicInformation']
     if len(json_data['activityFilmPlans']) > 0:
         for info in json_data['activityFilmPlans']:
+            id = info['id']
             date = info['date'].split()[0]
             startTime = ":" .join(info['startTime'].split()[1].split(':')[0:2])
             endTime = ":" .join(info['endTime'].split()[1].split(':')[0:2])
             price = int(info['price'])
             activityCinemaName = info['activityCinemaName']
             activityCinemaHall = info['activityCinemaHall']
-            movie_infos = "{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}\t{9}" \
+            hasTickets = info['hasTickets']
+            movie_infos = "{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}\t{9}\t{10}" \
                                  .format(id,activityFilmCategoryName,activityFilmName,
-                                         basicInformation,date,startTime,endTime,
-                                         price,activityCinemaName,activityCinemaHall)
+                                         basicInformation,date,startTime,endTime,price,
+                                         activityCinemaName,activityCinemaHall,hasTickets)
             movie_info_list.append(movie_infos)
-            print id,activityFilmCategoryName,activityFilmName,basicInformation,date,startTime,endTime,price,activityCinemaName,activityCinemaHall
+            print id,activityFilmCategoryName,activityFilmName,basicInformation,date,startTime,endTime,price,activityCinemaName,activityCinemaHall,hasTickets
 
 
 def get_schedule_detailed_info():
@@ -100,7 +101,7 @@ if __name__ == '__main__':
     movie_info_list = []
     url_list = []
     f_csv = 'movie.csv'
-    head_instruction = "id\tactivityFilmCategoryName\tactivityFilmName\tbasicInformation\tdate\tstartTime\tendTime\tprice\tactivityCinemaName\tactivityCinemaHall"
+    head_instruction = "id\tactivityFilmCategoryName\tactivityFilmName\tbasicInformation\tdate\tstartTime\tendTime\tprice\tactivityCinemaName\tactivityCinemaHall,hasTickets"
     movie_info_list = get_schedule_detailed_info()
     #movie_info_list = get_schedule_base_info()
     write_to_csv(f_csv, head_instruction, *movie_info_list)
