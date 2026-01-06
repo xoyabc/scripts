@@ -1,0 +1,5 @@
+cat /tmp/1 |while read line;do date -d @${line} +"%F %T";done > /tmp/2
+
+
+cat /tmp/2 |awk '{print $1}' |sed 's#-#/#g'
+cat /tmp/2 |awk '{print $2}' |sed 's#-#/#g'
