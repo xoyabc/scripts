@@ -6,8 +6,12 @@ OUTPUT_FILE="output.csv"
 # curl 'https://www.uutix.com/api/oversea/projectGroup/hkiffpb2026/getProjectGroupDataList?t=1773158837987&WuKongReady=h5&projectGroupId=13&pageNo=1&pageSize=1000'
 
 jq -r '
-  ["projectName", "projectStartTime", "venueName"],
-  (.data[].projectList[] | [.projectName, .projectStartTime, .venueName])
+  ["projectName", "startTimeReadable", "venueName"],
+  (.data[].projectList[] | [
+    .projectName,
+    (.projectStartTime / 1000 + 8*3600 | strftime("%Y/%m/%d %H:%M")),
+    .venueName
+  ])
   | @csv
 ' /tmp/1 > ${OUTPUT_FILE}
 
