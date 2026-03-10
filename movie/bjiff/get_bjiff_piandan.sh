@@ -12,7 +12,7 @@ echo "cityName,cinemaName,movieName,hallName,showTime,showEndTime,language,dim,s
 last_file=$(ls * |grep -E '^[0-9]{1,2}$' |sort -n |tail -1)
 for file in $(seq 1 1 ${last_file})
 do
-	cat ${file} |jq -r '.data|.data[]|.showList|.[]| [.cityName, .cinemaName, .movieName, .hallName, .showTime, .showEndTime, .language, .dim, .sellPrice, .meetingType, .meetingInfo, .meetingName, .sellTime, .showSaleStatus] | @csv' >> ${OUTPUT_FILE}
+	cat ${file} |jq -r '.data|.data[]|.showList|.[]| [.cityName, .cinemaName, .movieName, .hallName, (.showTime |tonumber / 1000), (.showEndTime |tonumber / 1000), .language, .dim, .sellPrice, .meetingType, .meetingInfo, .meetingName, (.sellTime |tonumber / 1000), .showSaleStatus] | @csv' >> ${OUTPUT_FILE}
 done
 
 #/usr/bin/iconv -f utf-8 -t GBK ${OUTPUT_FILE} -o movie.csv
