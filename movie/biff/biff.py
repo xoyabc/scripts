@@ -37,7 +37,7 @@ douban_headers = {
 }
 
 def get_movie_url():
-    for day in xrange(18, 26):
+    for day in xrange(6, 16):
     #for day in xrange(18, 19):
         url_link = 'https://www.biff.kr/eng/html/schedule/date.asp?day1={0}' .format(day)
         #url_link = 'https://www.biff.kr/eng/html/schedule/date.asp?day1=19'
@@ -78,31 +78,31 @@ def get_movie_base_info(url_link):
         keywords = 'N/A'
 
     try:
-        Country_anchor = soup.find("span", text=re.compile("Country"))
+        Country_anchor = soup.find("span", class_="screen_outx", string="국가")
         Country = Country_anchor.next_element.next_element.strip()
     except:
         Country = 'N/A'
 
     try:
-        Production_Year_anchor = soup.find("span", text=re.compile("Production Year"))
+        Production_Year_anchor = soup.find("span", class_="screen_outx", string="제작연도")
         Production_Year = Production_Year_anchor.next_element.next_element.strip()
     except:
         Production_Year = 'N/A'
 
     try:
-        Running_Time_anchor = soup.find("span", text=re.compile("Running Time"))
+        Running_Time_anchor = soup.find("span", class_="screen_outx", string="러닝타임")
         Running_Time = Running_Time_anchor.next_element.next_element.strip().replace('min', '')
     except:
         Running_Time = 'N/A'
 
     try:
-        Format_anchor = soup.find("span", text=re.compile("Format"))
+        Format_anchor = soup.find("span", class_="screen_outx", string="상영포맷")
         Format = Format_anchor.next_element.next_element.strip()
     except:
         Format = 'N/A'
 
     try:
-        Color_anchor = soup.find("span", text=re.compile("Color"))
+        Color_anchor = soup.find("span", class_="screen_outx", string="컬러")
         Color = Color_anchor.next_element.next_element.strip()
     except:
         Color = 'N/A'
@@ -114,18 +114,30 @@ def get_movie_base_info(url_link):
         except:
             code = 'N/A'
         try:
-            date_anchor = s.find("span", text=re.compile("date"))
-            date = date_anchor.next_element.next_element.strip()
+            date_span = s.find("span", class_="date en")
+            # 移除里面韩文ir_pm子span
+            for sub_tag in date_span.find_all("span", class_="ir_pm"):
+                sub_tag.extract()
+            date = date_span.get_text(strip=True)
         except:
             date = 'N/A'
         try:
-            time_anchor = s.find("span", text=re.compile("time"))
-            time = time_anchor.next_element.next_element.strip()
+            time_span = s.find("span", class_="time en")
+            # 移除里面韩文ir_pm子span
+            for sub_tag in time_span.find_all("span", class_="ir_pm"):
+                sub_tag.extract()
+            time = time_span.get_text(strip=True)
         except:
             time = 'N/A'
         try:
-            theater_anchor = s.find("span", text=re.compile("theater"))
-            theater = theater_anchor.next_element.next_element.strip()
+            #theater_span = s.find("span", class_="theater")
+            ## 移除里面韩文ir_pm子span
+            #for sub_tag in theater_span.find_all("span", class_="ir_pm"):
+            #    sub_tag.extract()
+            #theater = theater_span.get_text(strip=True)
+            theater_tag = soup.find("span", class_="theater")
+            ir_tag = theater_tag.find("span", class_="ir_pm")
+            theater = ir_tag.next_element.next_element.strip()
         except:
             theater = 'N/A'
         try:
@@ -142,7 +154,7 @@ def get_movie_base_info(url_link):
         except:
             Information = 'N/A'
         try:
-            Director_list = [ x.text.rstrip() for x in soup.find_all('strong', attrs={"class": "dir_name desc bold"}) ]
+            Director_list = [ x.text.rstrip() for x in soup.find_all('strong', attrs={"class": "dir_name"}) ]
             Director = " / " .join(Director_list)
         except:
             Director = 'N/A'
