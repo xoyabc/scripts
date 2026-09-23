@@ -11,9 +11,9 @@ echo "Code,prodSeq,sdSeq,DateEn,Time,Title,Venue,hallNm,saleStatus,remainSeat" >
 
 
 #for date in $(seq 20 1 20)
-for date in $(seq 17 1 26)
+for date in $(seq -w 07 1 15)
 do
-	curl -s "https://filmapi.maketicket.co.kr/api/v1/prodList?chnlCd=WEB&perfDate=2025-09-${date}&venueSeq=&langCd=en" |jq -r '.prodList[] |[.sdCode, .prodSeq, .sdSeq, .sdDateEn, .sdTime, .perfMainNm, .venueNm, .hallNm, .saleStatus, .remainSeat] | @csv' >> ${OUTPUT_FILE}
+	curl -s "https://filmapi.maketicket.co.kr/api/v1/prodList?chnlCd=WEB&perfDate=2026-10-${date}&venueSeq=&langCd=en&partnerId=BIFF" |jq -r '.prodList[] |[.sdCode, .prodSeq, .sdSeq, .sdDateEn, .sdTime, .perfMainNm, .venueNm, .hallNm, .saleStatus, .remainSeat] | @csv' >> ${OUTPUT_FILE}
 done
 
 #/usr/bin/iconv -f utf-8 -t GBK ${OUTPUT_FILE} -o film.csv
@@ -23,7 +23,7 @@ done
 # CCJ
 #mail_addr=1031138448@qq.com
 mail_addr=995715054@qq.com
-for CCJ_code in 167 179
+for CCJ_code in 180 356 296 805 187 201 222 355 441 471 564 611 739
 do
 	if [ $(cat film.csv |awk -v value=${CCJ_code} -F "," '$1 ~ value{print $NF}' |grep -E '[1-9][0-9]*' |wc -l) -ge 1 ]
 	then
@@ -33,7 +33,7 @@ done
 
 # 1kfm5
 mail_addr_2=its1kfm5@163.com
-for CCJ_code in 402 493 535 577
+for CCJ_code in 606 611 474 450
 do
 	if [ $(cat film.csv |awk -v value=${CCJ_code} -F "," '$1 ~ value{print $NF}' |grep -E '[1-9][0-9]*' |wc -l) -ge 1 ]
 	then
@@ -43,7 +43,7 @@ done
 
 # ping
 mail_addr_3=yyp_1999@foxmail.com
-for CCJ_code in 241
+for CCJ_code in 005 008 020 805
 do
 	if [ $(cat film.csv |awk -v value=${CCJ_code} -F "," '$1 ~ value{print $NF}' |grep -E '[1-9][0-9]*' |wc -l) -ge 1 ]
 	then
