@@ -10,9 +10,9 @@ OUTPUT_FILE="output.csv"
 echo "Code,DateEn,Time,Title,Venue,hallNm,saleStatus,remainSeat" > ${OUTPUT_FILE}  # 添加 CSV 表头
 
 
-for date in $(seq 17 1 26)
+for date in $(seq -w 07 1 15)
 do
-	curl -s "https://filmapi.maketicket.co.kr/api/v1/prodList?chnlCd=WEB&perfDate=2025-09-${date}&venueSeq=&langCd=en" |jq -r '.prodList[] |[.sdCode, .sdDateEn, .sdTime, .perfMainNm, .venueNm, .hallNm, .saleStatus, .remainSeat] | @csv' >> ${OUTPUT_FILE}
+	curl -s "https://filmapi.maketicket.co.kr/api/v1/prodList?chnlCd=WEB&perfDate=2026-10-${date}&venueSeq=&langCd=en&partnerId=BIFF" |jq -r '.prodList[] |[.sdCode, .sdDateEn, .sdTime, .perfMainNm, .venueNm, .hallNm, .saleStatus, .remainSeat] | @csv' >> ${OUTPUT_FILE}
 done
 
 #/usr/bin/iconv -f utf-8 -t GBK ${OUTPUT_FILE} -o movie.csv
